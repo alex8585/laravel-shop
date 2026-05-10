@@ -8,8 +8,24 @@ class TagFactory extends Factory
 {
     public function definition(): array
     {
+        static $tags = [
+            'New',
+            'Popular',
+            'Sale',
+            'Premium',
+            'Gaming',
+            'Wireless',
+            'Bluetooth',
+            'Apple',
+            'Samsung',
+            '4K',
+            'Portable',
+            'Professional',
+        ];
+
         return [
-            'name' => fake()->unique()->word(),
+            'name' => fake()->randomElement($tags),
         ];
     }
 }
+

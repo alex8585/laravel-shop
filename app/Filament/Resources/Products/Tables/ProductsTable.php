@@ -6,15 +6,13 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-
 use Filament\Tables\Table;
-
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\TrashedFilter;
+use Illuminate\Support\Facades\Storage;
 
 class ProductsTable
 {
@@ -23,12 +21,14 @@ class ProductsTable
         return $table
             ->columns([
 
-                ImageColumn::make('image')
+                ImageColumn::make('image_url')
+                    ->label('Image')
                     ->square(),
 
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+
                 TextColumn::make('price')
                     ->money('USD')
                     ->sortable(),
@@ -67,7 +67,7 @@ class ProductsTable
                 EditAction::make(),
             ])
             ->recordUrl(
-                fn($record) => route('filament.admin.resources.products.edit', $record)
+                fn ($record) => route('filament.admin.resources.products.edit', $record)
             )
             ->bulkActions([
                 DeleteBulkAction::make(),

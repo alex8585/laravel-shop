@@ -9,8 +9,6 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 
-
-
 class ProductForm
 {
     public static function configure(Schema $schema): Schema
@@ -22,7 +20,7 @@ class ProductForm
                     ->required()
                     ->live(onBlur: true)
                     ->afterStateUpdated(
-                        fn($state, callable $set) =>
+                        fn ($state, callable $set) =>
                         $set('slug', \Illuminate\Support\Str::slug($state))
                     ),
 
@@ -59,7 +57,9 @@ class ProductForm
 
                 FileUpload::make('image')
                     ->image()
+                    ->disk('public')
                     ->directory('products'),
+
 
                 FileUpload::make('gallery')
                     ->disk('public')
