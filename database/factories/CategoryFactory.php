@@ -2,27 +2,22 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class CategoryFactory extends Factory
 {
+    protected $model = Category::class;
+
     public function definition(): array
     {
-        static $categories = [
-            'Smartphones',
-            'Laptops',
-            'Gaming',
-            'Audio',
-            'Accessories',
-            'Cameras',
-            'TV',
-            'Consoles',
-            'Wearables',
-            'Tablets',
-        ];
+        $name = fake()->unique()->word();
 
         return [
-            'name' => fake()->unique()->randomElement($categories),
+            'name' => ucfirst($name),
+
+            'slug' => Str::slug($name),
         ];
     }
 }

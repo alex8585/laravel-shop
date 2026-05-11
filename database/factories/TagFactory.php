@@ -2,30 +2,22 @@
 
 namespace Database\Factories;
 
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class TagFactory extends Factory
 {
+    protected $model = Tag::class;
+
     public function definition(): array
     {
-        static $tags = [
-            'New',
-            'Popular',
-            'Sale',
-            'Premium',
-            'Gaming',
-            'Wireless',
-            'Bluetooth',
-            'Apple',
-            'Samsung',
-            '4K',
-            'Portable',
-            'Professional',
-        ];
+        $name = fake()->unique()->word();
 
         return [
-            'name' => fake()->randomElement($tags),
+            'name' => ucfirst($name),
+
+            'slug' => Str::slug($name),
         ];
     }
 }
-

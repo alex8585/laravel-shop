@@ -9,10 +9,16 @@ class TagFilter implements ProductFilterInterface
 {
     public function apply(Builder $query, Request $request): Builder
     {
-        return $query->when($request->tag_id, function ($q) use ($request) {
-            $q->whereHas('tags', function ($q) use ($request) {
-                $q->where('tags.id', $request->tag_id);
-            });
+        $tags = $request->get('tags');
+
+        if (! $tags || ! is_array($tags)) {
+            return $query;
+        }
+
+        return $query->whereHas('tags', function ($q) use ($tags) {
+
+            $q->whereIn('tags.id', $tags);
+
         });
     }
 }

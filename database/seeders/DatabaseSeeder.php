@@ -3,23 +3,17 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Tag;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // ADMIN
         User::updateOrCreate(
             [
                 'email' => 'blyakher85@gmail.com',
@@ -30,15 +24,57 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // User::factory()->create([
-        //     'name' => 'alex',
-        //     'email' => 'blyakher85@gmail.com',
-        // ]);
+        // TAGS
+        $tags = [
+            'New',
+            'Popular',
+            'Sale',
+            'Gaming',
+            'Portable',
+            'Wireless',
+            'Bluetooth',
+            'Premium',
+            'Budget',
+            'Professional',
+            '4K',
+            'Smart',
+            'RGB',
+            'Noise Cancelling',
+            'USB-C',
+            'Fast Charging',
+            'OLED',
+            'Waterproof',
+            'Compact',
+            'Limited Edition',
+        ];
 
-        Tag::factory(20)->create();
+        foreach ($tags as $tag) {
+            Tag::firstOrCreate([
+                'name' => $tag,
+            ]);
+        }
 
-        Category::factory(10)->create();
+        // CATEGORIES
+        $categories = [
+            'Smartphones',
+            'Laptops',
+            'Tablets',
+            'Audio',
+            'Gaming',
+            'Cameras',
+            'Accessories',
+            'Monitors',
+            'Smart Home',
+            'Wearables',
+        ];
 
+        foreach ($categories as $category) {
+            Category::firstOrCreate([
+                'name' => $category,
+            ]);
+        }
+
+        // PRODUCTS
         Product::factory(100)->create();
     }
 }

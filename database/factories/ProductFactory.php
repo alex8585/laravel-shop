@@ -3,60 +3,61 @@
 namespace Database\Factories;
 
 use App\Models\Category;
-use Illuminate\Support\Str;
+use App\Models\Product;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class ProductFactory extends Factory
 {
+    protected $model = Product::class;
+
     public function definition(): array
     {
-        $products = [
+        $baseName = fake()->randomElement([
             'iPhone 15 Pro',
-            'Samsung Galaxy S24',
-            'MacBook Air M3',
-            'Gaming Mechanical Keyboard',
-            'Wireless Gaming Mouse',
-            'Sony WH-1000XM5',
-            'Apple Watch Ultra',
-            'iPad Pro 13',
-            'Dell XPS 15',
-            'PlayStation 5',
-            'Xbox Series X',
-            'Nintendo Switch OLED',
+            'Samsung Odyssey G7',
             'ASUS ROG Laptop',
-            'Logitech MX Master 3S',
-            'AirPods Pro 2',
             'GoPro Hero 12',
             'Canon EOS R6',
-            'DJI Mini 4 Pro',
-            'Samsung Odyssey G7',
-            'LG OLED TV 55',
-        ];
+            'Nintendo Switch OLED',
+            'MacBook Pro M3',
+            'AirPods Pro',
+            'iPad Pro 13',
+            'Sony WH-1000XM5',
+        ]);
 
-        $name = fake()->randomElement($products);
+        $name = $baseName . ' ' . uniqid();
 
         return [
             'name' => $name,
 
-            'slug' => Str::slug($name . '-' . fake()->unique()->numberBetween(1, 9999)),
+            'slug' => Str::slug($name),
 
-            'description' => fake()->paragraphs(
-                random_int(2, 5),
-                true
-            ),
+            'description' => fake()->paragraphs(4, true),
 
-            'price' => fake()->numberBetween(50, 5000),
 
-            'stock' => fake()->numberBetween(0, 120),
+            'price' => fake()->numberBetween(500, 5000),
 
-            'is_active' => true,
+            'stock' => fake()->numberBetween(0, 100),
+
+            'image' => 'http://shop1.d2.local/storage/placeholder.png',
 
             'category_id' => Category::inRandomOrder()->first()?->id,
 
-            'image' => null,
-
-            'gallery' => [],
+            'is_active' => true,
         ];
     }
-}
 
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Product $product) {
+
+            $tags = Tag::inRandomOrder()
+                ->take(rand(1, 4))
+                ->pluck('id');
+
+            $product->tags()->attach($tags);
+        });
+    }
+}

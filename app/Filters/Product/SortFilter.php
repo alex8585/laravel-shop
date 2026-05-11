@@ -7,17 +7,34 @@ use Illuminate\Http\Request;
 
 class SortFilter implements ProductFilterInterface
 {
+    protected array $allowedSorts = [
+
+        'id_asc' => ['id', 'asc'],
+        'id_desc' => ['id', 'desc'],
+
+        'name_asc' => ['name', 'asc'],
+        'name_desc' => ['name', 'desc'],
+
+        'price_asc' => ['price', 'asc'],
+        'price_desc' => ['price', 'desc'],
+
+        'stock_asc' => ['stock', 'asc'],
+        'stock_desc' => ['stock', 'desc'],
+
+        'oldest' => ['id', 'asc'],
+        'newest' => ['id', 'desc'],
+    ];
+
     public function apply(Builder $query, Request $request): Builder
     {
-        return match ($request->sort) {
+        $sort = $request->get('sort');
 
-            'price_asc' => $query->orderBy('price', 'asc'),
+        if (! $sort || ! isset($this->allowedSorts[$sort])) {
+            return $query->orderByDesc('id');
+        }
 
-            'price_desc' => $query->orderBy('price', 'desc'),
+        [$column, $direction] = $this->allowedSorts[$sort];
 
-            'newest' => $query->orderByDesc('id'),
-
-            default => $query->orderByDesc('id'),
-        };
+        return $query->orderBy($column, $direction);
     }
 }

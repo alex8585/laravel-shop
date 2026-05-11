@@ -12,12 +12,16 @@ class ProductController extends Controller
 {
     public function index(Request $request, ProductFilter $filter)
     {
+        $perPage = $request->get('per_page', 12);
+
+        $perPage = min((int)$perPage, 100);
+
         $products = $filter->apply(
             Product::query()
                 ->with(['category', 'tags'])
                 ->where('is_active', true),
             $request
-        )->paginate(12);
+        )->paginate($perPage);
 
         return ProductResource::collection($products);
     }
