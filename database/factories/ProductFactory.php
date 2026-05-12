@@ -27,21 +27,38 @@ class ProductFactory extends Factory
             'Sony WH-1000XM5',
         ]);
 
+        // Картинки из storage/app/public/products
+        $images = [
+            'products/iphone.jpg',
+            'products/laptop.jpg',
+            'products/camera.jpg',
+            'products/headphones.jpg',
+            'products/tablet.jpg',
+        ];
+
         $name = $baseName . ' ' . uniqid();
 
         return [
+
             'name' => $name,
 
             'slug' => Str::slug($name),
 
             'description' => fake()->paragraphs(4, true),
 
-
             'price' => fake()->numberBetween(500, 5000),
 
             'stock' => fake()->numberBetween(0, 100),
 
-            'image' => 'http://shop1.d2.local/storage/placeholder.png',
+            // СЛУЧАЙНАЯ КАРТИНКА
+            'image' => fake()->randomElement($images),
+
+            // Если gallery json поле
+            'gallery' => [
+                fake()->randomElement($images),
+                fake()->randomElement($images),
+                fake()->randomElement($images),
+            ],
 
             'category_id' => Category::inRandomOrder()->first()?->id,
 

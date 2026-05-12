@@ -73,8 +73,8 @@ class DatabaseSeeder extends Seeder
                 'name' => $category,
             ]);
         }
-
+        $this->call(ProductImportSeeder::class);
         // PRODUCTS
-        Product::factory(100)->create();
+        // Product::factory(100)->create();
     }
 }
